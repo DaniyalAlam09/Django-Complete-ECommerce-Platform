@@ -180,6 +180,14 @@ CORS_ALLOWED_ORIGINS = config(
     cast=Csv()
 )
 
+# CSRF Settings
+CSRF_TRUSTED_ORIGINS = config(
+    'CSRF_TRUSTED_ORIGINS',
+    default='https://django-complete-ecommerce-platform.onrender.com,http://localhost:8000,http://127.0.0.1:8000',
+    cast=Csv()
+)
+
+
 # REST Framework Settings
 REST_FRAMEWORK = {
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
