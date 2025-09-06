@@ -19,7 +19,15 @@ SECRET_KEY = config('SECRET_KEY', default='django-insecure-dev-key-change-in-pro
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = config('DEBUG', default=True, cast=bool)
 
-ALLOWED_HOSTS = config('ALLOWED_HOSTS', default='localhost,127.0.0.1,testserver', cast=Csv())
+ALLOWED_HOSTS = config(
+    'ALLOWED_HOSTS', 
+    default='localhost,127.0.0.1,testserver,django-complete-ecommerce-platform.onrender.com', 
+    cast=Csv()
+)
+
+# Add Render domains dynamically if not already present
+if not any('.onrender.com' in host for host in ALLOWED_HOSTS):
+    ALLOWED_HOSTS.extend(['*.onrender.com', '.onrender.com'])
 
 # Application definition
 DJANGO_APPS = [
