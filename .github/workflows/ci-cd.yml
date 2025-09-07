@@ -52,10 +52,10 @@ jobs:
       run: |
         isort --check-only --diff .
         
-- name: Run Flake8 (linting)
-  run: |
-    flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics || true
-    flake8 . --count --exit-zero --max-complexity=10 --max-line-length=88 --statistics || true
+    - name: Run Flake8 (linting)
+      run: |
+        flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics || true
+        flake8 . --count --exit-zero --max-complexity=10 --max-line-length=88 --statistics || true
 
         
     - name: Run MyPy (type checking)
