@@ -69,7 +69,7 @@ jobs:
         safety check --json --output safety-report.json || true
         
     - name: Upload security reports
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: security-reports
         path: |
@@ -85,7 +85,6 @@ jobs:
     strategy:
       matrix:
         python-version: ['3.9', '3.10', '3.11']
-        django-version: ['4.2.7', '4.1.14']
         
     steps:
     - name: Checkout code
@@ -97,9 +96,12 @@ jobs:
         python-version: ${{ matrix.python-version }}
         
     - name: Set up PostgreSQL
-      uses: supercharge/mongodb-github-action@1.8.0
+      uses: harmon758/postgresql-action@v1.0.0
       with:
-        mongodb-version: '6.0'
+        postgresql version: '15'
+        postgresql db: 'test_ecommerce'
+        postgresql user: 'postgres'
+        postgresql password: 'postgres'
         
     - name: Install system dependencies
       run: |
@@ -124,7 +126,7 @@ jobs:
         coverage xml
         
     - name: Upload coverage reports
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: coverage-reports-${{ matrix.python-version }}
         path: |
@@ -132,14 +134,14 @@ jobs:
           coverage.xml
           
     - name: Upload test results
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: test-results-${{ matrix.python-version }}
         path: |
           test-results/
           
     - name: Publish coverage to Codecov
-      uses: codecov/codecov-action@v3
+      uses: codecov/codecov-action@v4
       with:
         file: ./coverage.xml
         flags: unittests
@@ -165,7 +167,7 @@ jobs:
         output: 'trivy-results.sarif'
         
     - name: Upload Trivy scan results
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: trivy-scan-results
         path: trivy-results.sarif
@@ -182,7 +184,7 @@ jobs:
           --enableRetired
           
     - name: Upload OWASP results
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: owasp-dependency-check
         path: reports/
@@ -239,7 +241,7 @@ jobs:
         output: 'trivy-image-results.sarif'
         
     - name: Upload Trivy image scan results
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: trivy-image-scan-results
         path: trivy-image-results.sarif
@@ -322,12 +324,12 @@ jobs:
         
     - name: Create GitHub release
       if: github.event_name == 'release'
-      uses: actions/create-release@v1
+      uses: softprops/action-gh-release@v1
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
         tag_name: ${{ github.ref }}
-        release_name: Release ${{ github.ref }}
+        name: Release ${{ github.ref }}
         draft: false
         prerelease: false
 
@@ -362,7 +364,7 @@ jobs:
           --html=performance-report.html
           
     - name: Upload performance report
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: performance-report
         path: performance-report.html
