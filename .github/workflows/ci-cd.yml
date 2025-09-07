@@ -1,7 +1,11 @@
-- name: Trigger Render deploy
-  run: |
-    curl -X POST \
-      -H "Authorization: Bearer ${{ secrets.RENDER_API_KEY }}" \
-      -H "Content-Type: application/json" \
-      -d '{"serviceId":"${{ secrets.RENDER_SERVICE_ID }}","clearCache":false}' \
-      https://api.render.com/v1/services/${{ secrets.RENDER_SERVICE_ID }}/deploys
+deploy_render:
+  needs: build_and_push
+  runs-on: ubuntu-latest
+  steps:
+    - name: Trigger Render deploy
+      run: |
+        curl -X POST \
+          -H "Authorization: Bearer ${{ secrets.RENDER_API_KEY }}" \
+          -H "Content-Type: application/json" \
+          -d '{"serviceId":"${{ secrets.RENDER_SERVICE_ID }}","clearCache":false}' \
+          https://api.render.com/v1/services/${{ secrets.RENDER_SERVICE_ID }}/deploys
