@@ -397,30 +397,4 @@ jobs:
       env:
         SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
 
-# Post-job actions
-on:
-  workflow_run:
-    workflows: ["CI/CD Pipeline"]
-    types:
-      - completed
-
-jobs:
-  notify-completion:
-    name: Notify Workflow Completion
-    runs-on: ubuntu-latest
-    if: ${{ github.event.workflow_run.conclusion != 'skipped' }}
-    
-    steps:
-    - name: Notify workflow completion
-      uses: 8398a7/action-slack@v3
-      with:
-        status: ${{ github.event.workflow_run.conclusion }}
-        channel: '#ci-cd'
-        text: |
-          🔄 CI/CD Pipeline completed
-          Repository: ${{ github.repository }}
-          Workflow: ${{ github.event.workflow_run.name }}
-          Status: ${{ github.event.workflow_run.conclusion }}
-          Branch: ${{ github.event.workflow_run.head_branch }}
-      env:
-        SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+# Workflow completed successfully
